@@ -8,7 +8,7 @@ using UserRegistrationDotNetCore.Models;
 
 namespace UserRegistrationDotNetCore.Data
 {
-    public class DataContext : IdentityDbContext<AppilcationUser>
+    public class DataContext : IdentityDbContext<ApplicationUser>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {

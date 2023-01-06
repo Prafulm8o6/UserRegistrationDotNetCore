@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace UserRegistrationDotNetCore.Models
 {
-    public class AppilcationUser : IdentityUser
+    public class ApplicationUser : IdentityUser
     {
+        public string FirstName { get; set; }
     }
 }
