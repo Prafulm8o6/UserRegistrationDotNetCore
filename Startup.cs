@@ -9,6 +9,7 @@ namespace UserRegistrationDotNetCore
     using Microsoft.Extensions.Hosting;
     using UserRegistrationDotNetCore.Data;
     using UserRegistrationDotNetCore.Models;
+    using UserRegistrationDotNetCore.Repo;
 
     /// <summary>
     /// Defines the <see cref="Startup" />.
@@ -47,6 +48,7 @@ namespace UserRegistrationDotNetCore
                 options.Password.RequireLowercase = true;
                 options.Password.RequireDigit = true;
             });
+            services.AddTransient<IEmployee,EmployeeRepo>();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("CreateRolePolicy",policy=>policy.RequireClaim("Create Role"));
