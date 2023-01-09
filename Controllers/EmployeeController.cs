@@ -3,24 +3,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using UserRegistrationDotNetCore.Data;
+using UserRegistrationDotNetCore.Repo;
 
 namespace UserRegistrationDotNetCore.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly DataContext _context;
+        private readonly IEmployee _repository;
 
-        public EmployeeController(DataContext context)
+        public EmployeeController(IEmployee repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public IActionResult Index()
         {
-            return View();  
+            var employees = _repository.GetAll();
+            return View(employees);
         }
-
-
     }
 }
