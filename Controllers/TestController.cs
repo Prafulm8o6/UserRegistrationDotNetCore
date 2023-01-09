@@ -37,44 +37,71 @@ namespace UserRegistrationDotNetCore.Controllers
         public async Task<IActionResult> Edit(string Id)
         {
             ManageUserRole vm = new ManageUserRole();
-            var user = await _context.Users.Where(x => x.Id == Id).FirstOrDefaultAsync();
+            var user = await _context.Users.Where(x => x.Id == Id).SingleOrDefaultAsync();
             var userRole = await _context.UserRoles.Where(x => x.UserId == Id).Select(y => y.RoleId).ToListAsync();
             var userInClaims = await _context.UserClaims.Where(x => x.UserId == Id).Select(y => y.ClaimValue).ToListAsync();
-            vm.Roles = await _context.Roles.Select(x => new SelectListItem()
+            
+            vm.AppRoles = await _roleManager.Roles.Select(x => new SelectListItem()
             {
                 Text = x.Name,
                 Value = x.Id,
                 Selected = userRole.Contains(x.Id)
             }).ToListAsync();
             vm.AppUser = user;
-            vm.ApplicationClaims = ClaimStore.All.Select(x => new SelectListItem()
+
+            vm.AppClaims = ClaimStore.All.Select(x => new SelectListItem()
             {
                 Text = x.Type,
                 Value = x.Value,
                 Selected = userInClaims.Contains(x.Value)
-            });;
+            }).ToList();
+            
             return View(vm);
         }
 
         [HttpPost]
         public IActionResult Edit(ManageUserRole vm)
         {
-            var selectedRoleId = vm.Roles.Where(x => x.Selected).Select(y => y.Value).ToList();
+            var selectedRoleId = vm.AppRoles.Where(x => x.Selected).Select(y => y.Value).ToList();
             var aleradyExistRoleId = _context.UserRoles.Where(x => x.UserId == vm.AppUser.Id).Select(y => y.RoleId).ToList();
-            var toAdd = selectedRoleId.Except(aleradyExistRoleId);
-            var toRemove = aleradyExistRoleId.Except(selectedRoleId);
+            var toAddRole = selectedRoleId.Except(aleradyExistRoleId);
+            var toRemoveRole = aleradyExistRoleId.Except(selectedRoleId);
 
-            foreach (var item in toRemove)
+            foreach (var item in toRemoveRole)
             {
                 _context.UserRoles.Remove(new IdentityUserRole<string> { 
                     RoleId = item,
                     UserId = vm.AppUser.Id
                 });
             }
-            foreach (var item in toAdd)
+            foreach (var item in toAddRole)
             {
                 _context.UserRoles.Add(new IdentityUserRole<string> { 
                     RoleId = item,
+                    UserId = vm.AppUser.Id
+                });
+            }
+
+            var selectedClaimId = vm.AppClaims.Where(x => x.Selected).Select(y => y.Value).ToList();
+            var aleradyExistClaimId = _context.UserClaims.Where(x => x.UserId == vm.AppUser.Id).Select(y => y.Id.ToString()).ToList();
+            var toAddClaim = selectedClaimId.Except(aleradyExistClaimId);
+            var toRemoveClaim = aleradyExistClaimId.Except(selectedClaimId);
+
+            foreach (var item in toRemoveClaim)
+            {
+                _context.UserClaims.Remove(new IdentityUserClaim<string>
+                {
+                    Id = int.Parse(item),
+                    UserId = vm.AppUser.Id
+                });
+            }
+
+            foreach (var item in toAddClaim)
+            {
+                _context.UserClaims.Add(new IdentityUserClaim<string>
+                {
+                    ClaimType = item,
+                    ClaimValue = item,
                     UserId = vm.AppUser.Id
                 });
             }
