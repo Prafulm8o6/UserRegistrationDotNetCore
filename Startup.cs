@@ -47,6 +47,10 @@ namespace UserRegistrationDotNetCore
                 options.Password.RequireLowercase = true;
                 options.Password.RequireDigit = true;
             });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CreateRolePolicy",policy=>policy.RequireClaim("Create Role"));
+            });
         }
 
         /// <summary>
