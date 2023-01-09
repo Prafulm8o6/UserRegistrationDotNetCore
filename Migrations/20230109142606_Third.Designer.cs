@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UserRegistrationDotNetCore.Data;
 
 namespace UserRegistrationDotNetCore.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230109142606_Third")]
+    partial class Third
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -256,9 +258,6 @@ namespace UserRegistrationDotNetCore.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FacilityOfRoomId")
-                        .HasColumnType("int");
-
                     b.Property<int>("MaxAdults")
                         .HasColumnType("int");
 
@@ -281,8 +280,6 @@ namespace UserRegistrationDotNetCore.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FacilityOfRoomId");
 
                     b.HasIndex("RoomTypeId");
 
@@ -378,10 +375,6 @@ namespace UserRegistrationDotNetCore.Migrations
 
             modelBuilder.Entity("UserRegistrationDotNetCore.Models.Room", b =>
                 {
-                    b.HasOne("UserRegistrationDotNetCore.Models.RoomFacility", "FacilityOfRoom")
-                        .WithMany()
-                        .HasForeignKey("FacilityOfRoomId");
-
                     b.HasOne("UserRegistrationDotNetCore.Models.RoomType", "TypeOfRoom")
                         .WithMany()
                         .HasForeignKey("RoomTypeId")

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UserRegistrationDotNetCore.Data;
+using UserRegistrationDotNetCore.GenericRepo;
 using UserRegistrationDotNetCore.Models;
 using UserRegistrationDotNetCore.ViewModel;
 using UserRegistrationDotNetCore.ViewModels;
@@ -18,12 +19,21 @@ namespace UserRegistrationDotNetCore.Controllers
         private readonly DataContext _context;
         private UserManager<ApplicationUser> _userManager;
         private RoleManager<IdentityRole> _roleManager;
+        private readonly IGenericRepo<RoomType> _genericRepo;
 
-        public TestController(DataContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        //public TestController(DataContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        //{
+        //    _context = context;
+        //    _userManager = userManager;
+        //    _roleManager = roleManager;
+        //}
+
+        public TestController(DataContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IGenericRepo<RoomType> genericRepo)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _genericRepo = genericRepo;
         }
 
         [HttpGet]
@@ -108,6 +118,20 @@ namespace UserRegistrationDotNetCore.Controllers
 
             _context.SaveChanges();
             return RedirectToAction("Index","Test");
+        }
+
+        [HttpGet]
+        public IActionResult GenericRepoGetAll()
+        {
+            var listOfRoomType = _genericRepo.GetAll();
+            return View(listOfRoomType);
+        }
+
+        [HttpGet]
+        public IActionResult GenericRepoGetById(int Id)
+        {
+            var listOfRoomType = _genericRepo.GetById(Id);
+            return View(listOfRoomType);
         }
     }
 }
