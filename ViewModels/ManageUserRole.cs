@@ -11,5 +11,6 @@ namespace UserRegistrationDotNetCore.ViewModels
     {
         public ApplicationUser AppUser { get; set; }
         public List<SelectListItem> Roles { get; set; }
+        public object ApplicationClaims { get; internal set; }
     }
 }

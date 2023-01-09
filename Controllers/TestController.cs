@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserRegistrationDotNetCore.Data;
 using UserRegistrationDotNetCore.Models;
+using UserRegistrationDotNetCore.ViewModel;
 using UserRegistrationDotNetCore.ViewModels;
 
 namespace UserRegistrationDotNetCore.Controllers
@@ -38,6 +39,7 @@ namespace UserRegistrationDotNetCore.Controllers
             ManageUserRole vm = new ManageUserRole();
             var user = await _context.Users.Where(x => x.Id == Id).FirstOrDefaultAsync();
             var userRole = await _context.UserRoles.Where(x => x.UserId == Id).Select(y => y.RoleId).ToListAsync();
+            var userInClaims = await _context.UserClaims.Where(x => x.UserId == Id).Select(y => y.ClaimValue).ToListAsync();
             vm.Roles = await _context.Roles.Select(x => new SelectListItem()
             {
                 Text = x.Name,
@@ -45,7 +47,12 @@ namespace UserRegistrationDotNetCore.Controllers
                 Selected = userRole.Contains(x.Id)
             }).ToListAsync();
             vm.AppUser = user;
-
+            vm.ApplicationClaims = ClaimStore.All.Select(x => new SelectListItem()
+            {
+                Text = x.Type,
+                Value = x.Value,
+                Selected = userInClaims.Contains(x.Value)
+            });;
             return View(vm);
         }
 
