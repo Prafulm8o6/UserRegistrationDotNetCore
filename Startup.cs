@@ -37,7 +37,7 @@ namespace UserRegistrationDotNetCore
         {
             services.AddControllersWithViews();
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<ApplicationUser>().AddEntityFrameworkStores<DataContext>();
+            services.AddDefaultIdentity<ApplicationUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<DataContext>();
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequiredLength = 8;
