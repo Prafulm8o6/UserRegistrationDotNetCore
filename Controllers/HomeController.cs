@@ -42,18 +42,15 @@ namespace UserRegistrationDotNetCore.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(ApplicationUser model)
         {
-            if (ModelState.IsValid)
-            { 
-                var user = await _userManager.FindByIdAsync(model.Id);
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
-                user.Email = model.Email;
-                user.DOB = model.DOB;
-                var result = await _userManager.UpdateAsync(user);
-                if(result.Succeeded)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
+            var user = await _userManager.FindByIdAsync(model.Id);
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.Email = model.Email;
+            user.DOB = model.DOB;
+            var result = await _userManager.UpdateAsync(user);
+            if(result.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
             }
             return View(model);
         }
@@ -68,18 +65,67 @@ namespace UserRegistrationDotNetCore.Controllers
         public async Task<IActionResult> CreateRole(CreateRoleViewModel vm)
         {
             var result = await _roleManager.CreateAsync(new IdentityRole(vm.Name));
-            return View();
+            return RedirectToAction("IndexRole");
         }
 
         [HttpGet]
         public IActionResult IndexRole()
         {
-            return View();
+            var roles = _roleManager.Roles.ToList();
+            List<CreateRoleViewModel> vm = new List<CreateRoleViewModel>();
+            foreach (var item in roles)
+            {
+                vm.Add(new CreateRoleViewModel { Name = item.Name, Id = item.Id });
+            }
+            return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditRole(string id)
+        {
+            var role = await _roleManager.Roles.Where(x => x.Id == id).FirstOrDefaultAsync();
+            CreateRoleViewModel vm = new CreateRoleViewModel() { Id = role.Id, Name = role.Name };
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditRole(CreateRoleViewModel vm)
+        {
+            var role = await _roleManager.Roles.Where(x => x.Id == vm.Id).FirstOrDefaultAsync();
+            role.Name = vm.Name;
+            var result = await _roleManager.UpdateAsync(role);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("IndexRole", "Home");
+            }
+            return View(vm);
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteRole(string id)
+        {
+            var role = await _roleManager.Roles.Where(x => x.Id == id).FirstOrDefaultAsync();
+            CreateRoleViewModel vm = new CreateRoleViewModel() { Id = role.Id, Name = role.Name };
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteRole(CreateRoleViewModel vm)
+        {
+            var role = await _roleManager.Roles.Where(x => x.Id == vm.Id).FirstOrDefaultAsync();
+            var result = await _roleManager.DeleteAsync(role);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("IndexRole", "Home");
+            }
+            return View(vm);
+
         }
 
 
         public IActionResult Privacy()
-        {
+        { 
             return View();
         }
 
