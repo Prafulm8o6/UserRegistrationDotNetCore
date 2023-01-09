@@ -47,8 +47,19 @@ namespace UserRegistrationDotNetCore.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
+            [Display(Name = "First Name")]
+            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.")]
             public string FirstName { get; set; }
 
+            [Required]
+            [Display(Name = "Last Name")]
+            [StringLength(50, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.")]
+            public string LastName { get; set; }
+
+            [Required]
+            [Display(Name = "Date Of Birth")]
+            [DataType(DataType.Date)]
+            public string DOB { get; set; }
 
             [Required]
             [EmailAddress]
@@ -81,7 +92,7 @@ namespace UserRegistrationDotNetCore.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { FirstName = Input.FirstName, UserName = Input.Email, Email = Input.Email };
+                var user = new ApplicationUser { FirstName = Input.FirstName, LastName = Input.LastName, DOB = DateTime.Parse(Input.DOB), UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

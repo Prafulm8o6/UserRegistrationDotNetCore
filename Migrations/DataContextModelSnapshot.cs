@@ -154,7 +154,7 @@ namespace UserRegistrationDotNetCore.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("UserRegistrationDotNetCore.Models.AppilcationUser", b =>
+            modelBuilder.Entity("UserRegistrationDotNetCore.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -166,6 +166,9 @@ namespace UserRegistrationDotNetCore.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("DOB")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -174,6 +177,9 @@ namespace UserRegistrationDotNetCore.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -233,7 +239,7 @@ namespace UserRegistrationDotNetCore.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("UserRegistrationDotNetCore.Models.AppilcationUser", null)
+                    b.HasOne("UserRegistrationDotNetCore.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -242,7 +248,7 @@ namespace UserRegistrationDotNetCore.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("UserRegistrationDotNetCore.Models.AppilcationUser", null)
+                    b.HasOne("UserRegistrationDotNetCore.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -257,7 +263,7 @@ namespace UserRegistrationDotNetCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UserRegistrationDotNetCore.Models.AppilcationUser", null)
+                    b.HasOne("UserRegistrationDotNetCore.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -266,7 +272,7 @@ namespace UserRegistrationDotNetCore.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("UserRegistrationDotNetCore.Models.AppilcationUser", null)
+                    b.HasOne("UserRegistrationDotNetCore.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
