@@ -1,0 +1,67 @@
+﻿@model UserRegistrationDotNetCore.ViewModel.RoomViewModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Room</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxAdults" class="control-label"></label>
+                <input asp-for="MaxAdults" class="form-control" />
+                <span asp-validation-for="MaxAdults" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxChilds" class="control-label"></label>
+                <input asp-for="MaxChilds" class="form-control" />
+                <span asp-validation-for="MaxChilds" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RoomFare" class="control-label"></label>
+                <input asp-for="RoomFare" class="form-control" />
+                <span asp-validation-for="RoomFare" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NoOfBeds" class="control-label"></label>
+                <input asp-for="NoOfBeds" class="form-control" />
+                <span asp-validation-for="NoOfBeds" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RoomPictureUri" class="control-label">Room Picture</label>
+                <input asp-for="RoomPictureUri" class="form-control" />
+                <span asp-validation-for="RoomPictureUri" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RoomTypeId" class="control-label">Room Type</label>
+                <select asp-for="RoomTypeId" class="form-control" asp-items="@Model.TypesOfRoom"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="RoomFacilities" class="control-label">Room Facilities</label>
+                <select asp-for="RoomFacilities" class="form-control" asp-items="@Model.RoomFacilities"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
