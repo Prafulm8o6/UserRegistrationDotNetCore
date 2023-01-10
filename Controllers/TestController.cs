@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserRegistrationDotNetCore.Data;
 using UserRegistrationDotNetCore.GenericRepo;
+using UserRegistrationDotNetCore.Helper;
 using UserRegistrationDotNetCore.Models;
 using UserRegistrationDotNetCore.ViewModel;
 using UserRegistrationDotNetCore.ViewModels;
@@ -127,19 +128,24 @@ namespace UserRegistrationDotNetCore.Controllers
             return View(listOfRoomType);
         }
 
-        public IActionResult SearchUser(string searchUser)
+        public async Task<IActionResult> SearchUserAsync(int pageNumber = 1, string searchUser = null)
         {
+            var searchResult = _context.Users.AsNoTracking();
+            ViewBag.searchUser = searchUser;
             if (String.IsNullOrEmpty(searchUser))
             {
-                return View();
+                searchResult = _context.Users.Where(x => x.FirstName.StartsWith(searchUser) || x.LastName.StartsWith(searchUser) || x.Email.StartsWith(searchUser) || x.UserName.StartsWith(searchUser)).AsNoTracking();
+                if (searchResult.Count() == 0)
+                {
+                    ViewBag.users = "Search User Not Found";
+                    return View();
+                }
+                return View(searchResult);
             }
-            var searchResult = _context.Users.Where(x => x.FirstName.StartsWith(searchUser) || x.LastName.StartsWith(searchUser) || x.Email.StartsWith(searchUser) || x.UserName.StartsWith(searchUser)).ToList();
-            if (searchResult.Count == 0)
-            {
-                ViewBag.products = "Search User Not Found";
-                return View();
-            }
-            return View(searchResult);
+
+            int totalPages = 3;
+
+            return View(await PaginatedList<ApplicationUser>.CreateAsync(searchResult,pageNumber,totalPages));
         }
     }
 }

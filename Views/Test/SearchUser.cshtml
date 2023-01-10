@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ApplicationUser>
+﻿@model UserRegistrationDotNetCore.Helper.PaginatedList<ApplicationUser>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -6,19 +6,19 @@
 <h1>Search User</h1>
 
 <form asp-action="SearchUser">
-    <div class="form-group">
+    <div class="form-group gap-3">
         <div>
             <label>Search User Name : </label>
-            <input type="text" name="searchUser" class="form-control" />
+            <input type="text" name="searchUser" class="form-control" value="@ViewBag.searchUser"/>
         </div>
         <div>
             <input type="submit" value="Search" class="btn btn-info" />
         </div>
     </div>
     <div>
-        @if (ViewBag.products != null)
+        @if (ViewBag.users != null)
         {
-            <span class="alert alert-danger">@ViewBag.products</span>
+            <span class="alert alert-danger">@ViewBag.users</span>
         }
         @if (Model != null)
         {
@@ -26,25 +26,25 @@
                 <thead>
                     <tr>
                         <th>
-                            @Html.DisplayNameFor(model => model.Id)
+                            Id
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.FirstName)
+                            First Name
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.LastName)
+                            Last Name
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.Email)
+                            Email
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.UserName)
+                            Username
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.PhoneNumber)
+                            Phone No.
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.DOB)
+                            Date Of Birth
                         </th>
                     </tr>
                 </thead>
@@ -91,6 +91,22 @@
                     }
                 </tbody>
             </table>
+            var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    
+
+            <a asp-action="SearchUser"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-searchUser="@ViewBag.searchUser"
+               class="btn btn-info @prevDisabled">
+                Previous
+            </a>
+            <a asp-action="SearchUser"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-searchUser="@ViewBag.searchUser"
+               class="btn btn-info @nextDisabled">
+                Next
+            </a>
         }
     </div>
 </form>
