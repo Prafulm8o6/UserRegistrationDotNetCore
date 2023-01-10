@@ -21,13 +21,6 @@ namespace UserRegistrationDotNetCore.Controllers
         private RoleManager<IdentityRole> _roleManager;
         private readonly IGenericRepo<RoomType> _genericRepo;
 
-        //public TestController(DataContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
-        //{
-        //    _context = context;
-        //    _userManager = userManager;
-        //    _roleManager = roleManager;
-        //}
-
         public TestController(DataContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IGenericRepo<RoomType> genericRepo)
         {
             _context = context;
@@ -132,6 +125,21 @@ namespace UserRegistrationDotNetCore.Controllers
         {
             var listOfRoomType = _genericRepo.GetById(Id);
             return View(listOfRoomType);
+        }
+
+        public IActionResult SearchUser(string searchUser)
+        {
+            if (String.IsNullOrEmpty(searchUser))
+            {
+                return View();
+            }
+            var searchResult = _context.Users.Where(x => x.FirstName.StartsWith(searchUser) || x.LastName.StartsWith(searchUser) || x.Email.StartsWith(searchUser) || x.UserName.StartsWith(searchUser)).ToList();
+            if (searchResult.Count == 0)
+            {
+                ViewBag.products = "Search User Not Found";
+                return View();
+            }
+            return View(searchResult);
         }
     }
 }

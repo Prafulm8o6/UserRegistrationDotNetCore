@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Search</h1>
+
+<form asp-action="Index">
+    <div class="form-group">
+        <div>
+            <label>Search Product Name : </label>
+            <input type="text" name="searchProductName" class="form-control" />
+        </div>
+        <div>
+            <input type="submit" value="Search" class="btn btn-info" />
+        </div>
+    </div>
+    <div>
+        @if (ViewBag.products != null)
+        {
+            <span class="alert alert-danger">@ViewBag.products</span>
+        }
+        @if (Model!=null)
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Id)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Description)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <label asp-for="@item.Id">
+                                    @item.Id
+                                </label>
+                            </td>
+                            <td>
+                                <label asp-for="@item.Title">
+                                    @item.Title
+                                </label>
+                            </td>
+                            <td>
+                                <label asp-for="@item.Description">
+                                    @item.Description
+                                </label>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</form>
+
