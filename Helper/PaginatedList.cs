@@ -14,7 +14,7 @@ namespace UserRegistrationDotNetCore.Helper
         public PaginatedList(List<T> items,int count, int pageIndex, int totalPages)
         {
             PageIndex = pageIndex;
-            TotalPages = (int) Math.Ceiling( Count / (double) totalPages);
+            TotalPages = (int) Math.Ceiling( count / (double) totalPages);
             this.AddRange(items);
         }
 
