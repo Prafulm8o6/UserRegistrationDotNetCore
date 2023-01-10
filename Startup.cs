@@ -8,6 +8,7 @@ namespace UserRegistrationDotNetCore
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using UserRegistrationDotNetCore.Data;
+    using UserRegistrationDotNetCore.GenericRepo;
     using UserRegistrationDotNetCore.Models;
     using UserRegistrationDotNetCore.Repo;
 
@@ -49,6 +50,7 @@ namespace UserRegistrationDotNetCore
                 options.Password.RequireDigit = true;
             });
             services.AddTransient<IEmployee,EmployeeRepo>();
+            services.AddTransient(typeof(IGenericRepo<>),typeof (GenericRepo<>));
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("CreateRolePolicy",policy=>policy.RequireClaim("Create Role"));

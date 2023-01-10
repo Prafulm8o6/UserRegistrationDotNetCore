@@ -1,0 +1,113 @@
+﻿@model UserRegistrationDotNetCore.Helper.PaginatedList<ApplicationUser>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>Search User</h1>
+
+<form asp-action="SearchUser">
+    <div class="form-group gap-3">
+        <div>
+            <label>Search User Name : </label>
+            <input type="text" name="searchUser" class="form-control" value="@ViewBag.searchUser"/>
+        </div>
+        <div>
+            <input type="submit" value="Search" class="btn btn-info" />
+        </div>
+    </div>
+    <div>
+        @if (ViewBag.users != null)
+        {
+            <span class="alert alert-danger">@ViewBag.users</span>
+        }
+        @if (Model != null)
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Id
+                        </th>
+                        <th>
+                            First Name
+                        </th>
+                        <th>
+                            Last Name
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Username
+                        </th>
+                        <th>
+                            Phone No.
+                        </th>
+                        <th>
+                            Date Of Birth
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <label asp-for="@item.Id">
+                                    @item.Id
+                                </label>
+                            </td>
+                            <td>
+                                <label asp-for="@item.FirstName">
+                                    @item.FirstName
+                                </label>
+                            </td>
+                            <td>
+                                <label asp-for="@item.LastName">
+                                    @item.LastName
+                                </label>
+                            </td>
+                            <td>
+                                <label asp-for="@item.Email">
+                                    @item.Email
+                                </label>
+                            </td>
+                            <td>
+                                <label asp-for="@item.UserName">
+                                    @item.UserName
+                                </label>
+                            </td>
+                            <td>
+                                <label asp-for="@item.PhoneNumber">
+                                    @item.PhoneNumber
+                                </label>
+                            </td>
+                            <td>
+                                <label asp-for="@item.DOB">
+                                    @item.DOB
+                                </label>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    
+
+            <a asp-action="SearchUser"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-searchUser="@ViewBag.searchUser"
+               class="btn btn-info @prevDisabled">
+                Previous
+            </a>
+            <a asp-action="SearchUser"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-searchUser="@ViewBag.searchUser"
+               class="btn btn-info @nextDisabled">
+                Next
+            </a>
+        }
+    </div>
+</form>
+

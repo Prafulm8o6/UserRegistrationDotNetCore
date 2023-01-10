@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UserRegistrationDotNetCore.Data;
+using UserRegistrationDotNetCore.GenericRepo;
+using UserRegistrationDotNetCore.Helper;
 using UserRegistrationDotNetCore.Models;
 using UserRegistrationDotNetCore.ViewModel;
 using UserRegistrationDotNetCore.ViewModels;
@@ -18,12 +20,14 @@ namespace UserRegistrationDotNetCore.Controllers
         private readonly DataContext _context;
         private UserManager<ApplicationUser> _userManager;
         private RoleManager<IdentityRole> _roleManager;
+        private readonly IGenericRepo<RoomType> _genericRepo;
 
-        public TestController(DataContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public TestController(DataContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IGenericRepo<RoomType> genericRepo)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _genericRepo = genericRepo;
         }
 
         [HttpGet]
@@ -108,6 +112,40 @@ namespace UserRegistrationDotNetCore.Controllers
 
             _context.SaveChanges();
             return RedirectToAction("Index","Test");
+        }
+
+        [HttpGet]
+        public IActionResult GenericRepoGetAll()
+        {
+            var listOfRoomType = _genericRepo.GetAll();
+            return View(listOfRoomType);
+        }
+
+        [HttpGet]
+        public IActionResult GenericRepoGetById(int Id)
+        {
+            var listOfRoomType = _genericRepo.GetById(Id);
+            return View(listOfRoomType);
+        }
+
+        public async Task<IActionResult> SearchUserAsync(int pageNumber = 1, string searchUser = null)
+        {
+            var searchResult = _context.Users.AsNoTracking();
+            ViewBag.searchUser = searchUser;
+            if (String.IsNullOrEmpty(searchUser))
+            {
+                searchResult = _context.Users.Where(x => x.FirstName.StartsWith(searchUser) || x.LastName.StartsWith(searchUser) || x.Email.StartsWith(searchUser) || x.UserName.StartsWith(searchUser)).AsNoTracking();
+                if (searchResult.Count() == 0)
+                {
+                    ViewBag.users = "Search User Not Found";
+                    return View();
+                }
+                return View(searchResult);
+            }
+
+            int totalPages = 3;
+
+            return View(await PaginatedList<ApplicationUser>.CreateAsync(searchResult,pageNumber,totalPages));
         }
     }
 }
