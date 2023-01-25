@@ -21,7 +21,7 @@ namespace UserRegistrationDotNetCore.Models
                 SmtpClient smtp = new SmtpClient("smtp.gmail.com", 465);
                 smtp.UseDefaultCredentials = true;
                 smtp.EnableSsl = true;
-                smtp.Credentials = new System.Net.NetworkCredential("loancompanyproject2021@gmail.com", "Loancompany@2021");
+                smtp.Credentials = new System.Net.NetworkCredential("loancompanyproject2021@gmail.com", "");
                 await smtp.SendMailAsync(mailMessage);
             }
         }
